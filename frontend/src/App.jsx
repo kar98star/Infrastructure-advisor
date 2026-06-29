@@ -192,11 +192,14 @@ return (
         <h2>🏗 Architecture Flow</h2>
 
         <ArchitectureDiagram
-  services={
-    result.architecture?.map(
-      (item) => item.component
-    ) || []
-  }
+  services={[
+    "Frontend",
+    "API Gateway",
+    "Lambda",
+    "DynamoDB",
+    "S3",
+    "CloudFront",
+  ]}
 />
       </div>
 
