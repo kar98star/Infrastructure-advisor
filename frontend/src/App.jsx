@@ -87,9 +87,9 @@ const downloadPDF = () => {
   y += 10;
 
   result.architecture?.forEach((item) => {
-    doc.text(`• ${item.service}`, 25, y);
+    doc.text(`• ${item.component}`, 25, y);
     y += 8;
-    doc.text(item.purpose, 30, y);
+    doc.text(item.description, 30, y);
     y += 10;
   });
 
@@ -194,7 +194,7 @@ return (
         <ArchitectureDiagram
   services={
     result.architecture?.map(
-      (item) => item.service
+      (item) => item.component
     ) || []
   }
 />
@@ -210,9 +210,13 @@ return (
           <ul>
   {(result.architecture || []).map((item, index) => (
     <li key={index}>
-      <strong>{item.service}</strong>
+      <strong>{item.component}</strong>
       <br />
-      {item.purpose}
+      {item.description}
+      <br />
+      <small>
+        {item.component?.join(", ")}
+      </small>
     </li>
   ))}
 </ul>
