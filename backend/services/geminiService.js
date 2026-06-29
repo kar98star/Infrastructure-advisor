@@ -9,11 +9,17 @@ Analyze the following project requirement and return ONLY valid JSON.
 Project Requirement:
 "${requirement}"
 
-Return the response in this exact format:
+Return ONLY valid JSON in exactly this format.
 
 {
   "requirement": "",
-  "architecture": [],
+  "architecture": [
+    {
+      "component": "",
+      "description": "",
+      "services": []
+    }
+  ],
   "security": [],
   "bestPractices": [],
   "reasoning": [],
@@ -21,6 +27,15 @@ Return the response in this exact format:
   "estimatedCost": "",
   "terraform": ""
 }
+
+Rules:
+- Every architecture item MUST contain:
+  - component
+  - description
+  - services (array of AWS services)
+- Never use keys like service or purpose.
+- Always return services as an array of strings.
+- Return ONLY valid JSON.
 
 Rules:
 - Return ONLY JSON.

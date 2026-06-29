@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://13.127.28.189:5000";
 
 export const analyzeRequirement = async (requirement) => {
   const response = await axios.post(
@@ -10,6 +10,5 @@ export const analyzeRequirement = async (requirement) => {
     }
   );
 
-  // Return only the actual architecture data
   return response.data.data;
 };

@@ -87,8 +87,10 @@ const downloadPDF = () => {
   y += 10;
 
   result.architecture?.forEach((item) => {
-    doc.text(`• ${item}`, 25, y);
+    doc.text(`• ${item.service}`, 25, y);
     y += 8;
+    doc.text(item.purpose, 30, y);
+    y += 10;
   });
 
   y += 10;
@@ -192,7 +194,7 @@ return (
         <ArchitectureDiagram
   services={
     result.architecture?.map(
-      (item) => item.component
+      (item) => item.service
     ) || []
   }
 />
@@ -206,23 +208,13 @@ return (
           <h2>🏗 AWS Architecture</h2>
 
           <ul>
-  {(result.architecture || []).map(
-    (item, index) => (
-      <li key={index}>
-        <strong>{item.component}</strong>
-
-        <br />
-
-        {item.description}
-
-        <br />
-
-        <small>
-          Services: {item.services.join(", ")}
-        </small>
-      </li>
-    )
-  )}
+  {(result.architecture || []).map((item, index) => (
+    <li key={index}>
+      <strong>{item.service}</strong>
+      <br />
+      {item.purpose}
+    </li>
+  ))}
 </ul>
         </div>
 
@@ -280,7 +272,7 @@ return (
                     <strong>
                       {service}
                     </strong>
-                    : {"$" + cost}
+: {cost}
                   </li>
                 )
               )}
