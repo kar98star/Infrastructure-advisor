@@ -215,7 +215,7 @@ return (
       {item.description}
       <br />
       <small>
-        {item.component?.join(", ")}
+        {item.services?.join(", ")}
       </small>
     </li>
   ))}
