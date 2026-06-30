@@ -35,9 +35,8 @@ try {
   );
 
   console.log(
-    "API Response:",
-    response
-  );
+  JSON.stringify(response.architecture, null, 2)
+);
 
   setResult(response);
 
@@ -192,14 +191,9 @@ return (
         <h2>🏗 Architecture Flow</h2>
 
         <ArchitectureDiagram
-  services={[
-    "Frontend",
-    "API Gateway",
-    "Lambda",
-    "DynamoDB",
-    "S3",
-    "CloudFront",
-  ]}
+  services={
+    (result.architecture || []).map((item) => item.component || item.service)
+  }
 />
       </div>
 
@@ -213,9 +207,9 @@ return (
           <ul>
   {(result.architecture || []).map((item, index) => (
     <li key={index}>
-      <strong>{item.component}</strong>
+      <strong>{item.component || item.service || "Unknown Service"}</strong>
       <br />
-      {item.description}
+      {item.description || item.role || ""}
       <br />
       <small>
         {item.services?.join(", ")}
