@@ -1,5 +1,39 @@
 const { model } = require("./geminiAI");
 
+function normalizeArchitectureItem(item) {
+  if (typeof item === "string") {
+    const match = item.match(/^(.+?)\s*\((.+)\)$/);
+    return match
+      ? { component: match[1].trim(), description: match[2].trim(), services: [] }
+      : { component: item, description: "", services: [] };
+  }
+
+  return {
+    component: item.component || item.service || item.role || "Unknown Service",
+    description: item.description || item.purpose || "",
+    services: Array.isArray(item.services) ? item.services : [],
+  };
+}
+
+function normalizeCostBreakdown(costBreakdown) {
+  if (Array.isArray(costBreakdown)) {
+    return costBreakdown.map((entry) => ({
+      service: entry.service || entry.name || "Unknown",
+      cost: entry.cost || entry.amount || "",
+    }));
+  }
+
+  // Fallback: if Gemini still returns an object map, convert it
+  if (costBreakdown && typeof costBreakdown === "object") {
+    return Object.entries(costBreakdown).map(([service, cost]) => ({
+      service,
+      cost: String(cost),
+    }));
+  }
+
+  return [];
+}
+
 async function generateArchitecture(requirement) {
   const prompt = `
 You are an expert AWS Cloud Architect.
@@ -23,7 +57,12 @@ Return ONLY valid JSON in exactly this format.
   "security": [],
   "bestPractices": [],
   "reasoning": [],
-  "costBreakdown": {},
+  "costBreakdown": [
+    {
+      "service": "",
+      "cost": ""
+    }
+  ],
   "estimatedCost": "",
   "terraform": ""
 }
@@ -33,8 +72,9 @@ Rules:
   - component
   - description
   - services (array of AWS services)
-- Never use keys like service or purpose.
+- Never use keys like service or purpose for architecture items.
 - Always return services as an array of strings.
+- costBreakdown MUST be an array of objects, each with "service" and "cost" fields. Do NOT return costBreakdown as an object/map.
 - Return ONLY valid JSON.
 
 Rules:
@@ -71,6 +111,8 @@ Rules:
     return {
       requirement,
       ...parsed,
+      architecture: (parsed.architecture || []).map(normalizeArchitectureItem),
+      costBreakdown: normalizeCostBreakdown(parsed.costBreakdown),
     };
   } catch (error) {
     console.error("========== JSON PARSE ERROR ==========");

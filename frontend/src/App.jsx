@@ -191,10 +191,8 @@ return (
         <h2>🏗 Architecture Flow</h2>
 
         <ArchitectureDiagram
-  services={
-    (result.architecture || []).map((item) => item.component || item.service)
-  }
-/>
+          services={(result.architecture || []).map((item) => item.component)}
+        />
       </div>
 
       {/* Main Cards */}
@@ -205,18 +203,18 @@ return (
           <h2>🏗 AWS Architecture</h2>
 
           <ul>
-  {(result.architecture || []).map((item, index) => (
-    <li key={index}>
-      <strong>{item.component || item.service || "Unknown Service"}</strong>
-      <br />
-      {item.description || item.role || ""}
-      <br />
-      <small>
-        {item.services?.join(", ")}
-      </small>
-    </li>
-  ))}
-</ul>
+            {(result.architecture || []).map((item, index) => (
+              <li key={index}>
+                <strong>{item.component}</strong>
+                <br />
+                {item.description}
+                <br />
+                <small>
+                  {item.services?.join(", ")}
+                </small>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Security */}
@@ -265,15 +263,13 @@ return (
             <h2>💵 Cost Breakdown</h2>
 
             <ul>
-              {Object.entries(
-                result.costBreakdown || {}
-              ).map(
-                ([service, cost]) => (
-                  <li key={service}>
+              {(result.costBreakdown || []).map(
+                (entry, index) => (
+                  <li key={index}>
                     <strong>
-                      {service}
+                      {entry.service}
                     </strong>
-: {cost}
+: {entry.cost}
                   </li>
                 )
               )}
